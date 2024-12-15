@@ -1,9 +1,12 @@
 import {Component} from '@angular/core';
+import {WeatherTestComponent} from './components/weather-test/weather-test.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [],
+  imports: [
+    WeatherTestComponent
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

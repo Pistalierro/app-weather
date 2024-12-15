@@ -3,6 +3,7 @@ import {provideRouter} from '@angular/router';
 import {routes} from './app.routes';
 import {initializeApp, provideFirebaseApp} from '@angular/fire/app';
 import {getFirestore, provideFirestore} from '@angular/fire/firestore';
+import {provideHttpClient} from '@angular/common/http';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDIgRkgzoZXx9selPEGCWFhKx3Zp22aB4g',
@@ -13,11 +14,18 @@ const firebaseConfig = {
   appId: '1:223082059763:web:992daf8afee48985b76486'
 };
 
+export const apiConfig = {
+  weatherApiUrl: 'https://api.openweathermap.org/data/2.5',
+  weatherApiKey: '41f36d2a0b64044a0868f2b100110395'
+};
+
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({eventCoalescing: true}),
     provideRouter(routes),
     provideFirebaseApp(() => initializeApp(firebaseConfig)),
     provideFirestore(() => getFirestore()),
+    provideHttpClient()
   ]
 };

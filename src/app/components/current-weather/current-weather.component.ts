@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-current-weather',
@@ -8,5 +8,4 @@ import { Component } from '@angular/core';
   styleUrl: './current-weather.component.scss'
 })
 export class CurrentWeatherComponent {
-
 }
