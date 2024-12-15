@@ -1,11 +1,13 @@
 import {Component} from '@angular/core';
-import {WeatherTestComponent} from './components/weather-test/weather-test.component';
+import {CurrentWeatherComponent} from './components/current-weather/current-weather.component';
+import {ForecastComponent} from './components/forecast/forecast.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
-    WeatherTestComponent
+    CurrentWeatherComponent,
+    ForecastComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

@@ -1,1 +1,18 @@
-<p>current-weather works!</p>
+<div *ngIf="loading()" class="loading text-gray-500 text-center">
+  Загрузка данных...
+</div>
+<div *ngIf="error()" class="error text-red-500 text-center">
+  {{ error() }}
+</div>
+<div *ngIf="weather() && !loading() && !error()"
+     class="weather-container text-center p-6 bg-gray-100 rounded-lg shadow-md max-w-md mx-auto">
+  <h1 class="city text-2xl font-bold">{{ weather().name }}, {{ weather().sys.country }}</h1>
+  <p class="temperature text-5xl font-semibold my-4">{{ weather().main.temp }}°C</p>
+  <p class="feels-like text-lg text-gray-700">Ощущается как: {{ weather().main.feels_like }}°C</p>
+  <p class="description text-lg text-gray-500 capitalize">{{ weather().weather[0].description }}</p>
+  <img
+    [src]="'https://openweathermap.org/img/wn/' + weather().weather[0].icon + '@2x.png'"
+    alt="Weather icon"
+    class="weather-icon mx-auto my-4"
+  />
+</div>
