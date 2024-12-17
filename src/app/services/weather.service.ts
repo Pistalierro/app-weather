@@ -37,22 +37,12 @@ export class WeatherService {
     });
   }
 
-  getDailyWeather(lat: number, lon: number, city: string): void {
-    this.loading.set(true);
-    this.error.set(null);
-
-    const url = `${this.apiUrlOpenMeteo}?latitude=${lat}&longitude=${lon}&daily=temperature_2m_min,temperature_2m_max&timezone=Europe/${city}`;
+  fetchDailyWeather(lat: number, lon: number): void {
+    const url = `${this.apiUrlOpenMeteo}?latitude=${lat}&longitude=${lon}&daily=temperature_2m_min,temperature_2m_max&timezone=auto`;
 
     this.http.get(url).subscribe({
-      next: (res) => {
-        this.dailyWeather.set(res);
-        this.loading.set(false);
-      },
-      error: (err) => {
-        console.error('Ошибка запроса:', err);
-        this.error.set('Не удалось загрузить данные о погоде.');
-        this.loading.set(false);
-      },
+      next: (res) => this.dailyWeather.set(res),
+      error: (err) => this.error.set('Ошибка получения прогноза погоды'),
     });
   }
 
