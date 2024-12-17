@@ -4,6 +4,7 @@ import {routes} from './app.routes';
 import {initializeApp, provideFirebaseApp} from '@angular/fire/app';
 import {getFirestore, provideFirestore} from '@angular/fire/firestore';
 import {provideHttpClient} from '@angular/common/http';
+import {provideAnimations} from '@angular/platform-browser/animations';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDIgRkgzoZXx9selPEGCWFhKx3Zp22aB4g',
@@ -15,8 +16,9 @@ const firebaseConfig = {
 };
 
 export const apiConfig = {
-  weatherApiUrl: 'https://api.openweathermap.org/data/2.5',
-  weatherApiKey: '41f36d2a0b64044a0868f2b100110395'
+  apiUrlOpenWeatherMap: 'https://api.openweathermap.org/data/2.5',
+  apiKeyOpenWeatherMa: '41f36d2a0b64044a0868f2b100110395',
+  apiUrlOpenMeteo: 'https://api.open-meteo.com/v1/forecast'
 };
 
 
@@ -26,6 +28,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideFirebaseApp(() => initializeApp(firebaseConfig)),
     provideFirestore(() => getFirestore()),
-    provideHttpClient()
+    provideHttpClient(),
+    provideAnimations()
   ]
 };

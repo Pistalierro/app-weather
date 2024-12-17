@@ -1,19 +1,13 @@
-<div *ngIf="loading()" class="loading text-gray-500 text-center">
-  Загрузка данных...
-</div>
-<div *ngIf="error()" class="error text-red-500 text-center">
-  {{ error() }}
-</div>
-<div *ngIf="forecast() && !loading() && !error()" class="forecast-container grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
-  <div *ngFor="let day of forecast()" class="forecast-card bg-white p-4 rounded shadow-md">
-    <h3 class="text-lg font-bold">{{ day.dt_txt | date: 'EEEE' }}</h3>
+<div *ngIf="forecast() && !loading() && !error()" class="forecast-container grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto mt-8">
+  <div *ngFor="let day of forecast()" class="forecast-card bg-white p-4 rounded shadow-md text-center">
+    <h3 class="text-lg font-bold text-blue-700">{{ day.dt_txt | date: 'EEEE' }}</h3>
     <p class="text-sm text-gray-600">{{ day.dt_txt | date: 'd MMMM, HH:mm' }}</p>
     <img
       [src]="'https://openweathermap.org/img/wn/' + day.weather[0].icon + '@2x.png'"
       alt="Weather icon"
-      class="weather-icon mx-auto"
+      class="weather-icon mx-auto my-4"
     />
-    <p class="temperature text-2xl font-medium">{{ day.main.temp }}°C</p>
-    <p class="description text-gray-500 capitalize">{{ day.weather[0].description }}</p>
+    <p class="temperature text-2xl font-medium text-blue-500">{{ day.main.temp }}°C</p>
+    <p class="description text-gray-600 capitalize">{{ day.weather[0].description }}</p>
   </div>
 </div>

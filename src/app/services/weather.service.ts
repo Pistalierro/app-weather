@@ -1,56 +1,75 @@
 import {inject, Injectable, signal} from '@angular/core';
 import {apiConfig} from '../app.config';
 import {HttpClient} from '@angular/common/http';
+import {CurrentResponseInterface} from '../models/current-response.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WeatherService {
 
-  currentWeather = signal<any | null>(null);
-  forecast = signal<any | null>(null);
+  currentWeather = signal<CurrentResponseInterface | null>(null);
+  dailyWeather = signal<any | null>(null);
   loading = signal<boolean>(false);
   error = signal<string | null>(null);
 
-  private apiUrl: string = apiConfig.weatherApiUrl;
-  private apiKey: string = apiConfig.weatherApiKey;
+  private apiUrlCurrent: string = apiConfig.apiUrlOpenWeatherMap;
+  private apiUrlOpenMeteo: string = apiConfig.apiUrlOpenMeteo;
+  private apiKey: string = apiConfig.apiKeyOpenWeatherMa;
   private http = inject(HttpClient);
 
-  fetchCurrentWeather(city: string) {
+  fetchCurrentWeather(city: string): void {
     this.loading.set(true);
     this.error.set(null);
 
-    const url = `${this.apiUrl}/weather?q=${city}&appid=${this.apiKey}&units=metric`;
-    this.http.get(url).subscribe({
-      next: (res: any) => {
+    const url = `${this.apiUrlCurrent}/weather?q=${city}&appid=${this.apiKey}&units=metric`;
+
+    this.http.get<CurrentResponseInterface>(url).subscribe({
+      next: (res: CurrentResponseInterface) => {
         this.currentWeather.set(res);
         this.loading.set(false);
       },
-      error: (err: any) => {
-        this.error.set('Ошибка загрузки текущей погоды');
+      error: (err) => {
+        console.error('Ошибка запроса:', err);
+        this.error.set('Не удалось загрузить данные о погоде.');
         this.loading.set(false);
-        console.log(err);
-      }
+      },
     });
   }
 
-  fetchForecastWeather(city: string) {
+  getDailyWeather(lat: number, lon: number, city: string): void {
     this.loading.set(true);
     this.error.set(null);
 
-    const url = `${this.apiUrl}/forecast?q=${city}&appid=${this.apiKey}&units=metric`;
+    const url = `${this.apiUrlOpenMeteo}?latitude=${lat}&longitude=${lon}&daily=temperature_2m_min,temperature_2m_max&timezone=Europe/${city}`;
 
     this.http.get(url).subscribe({
-      next: (res: any) => {
-        const dailyForecast = res.list.filter((item: any) => item.dt_txt.includes('12:00:00'));
-        this.forecast.set(dailyForecast);
+      next: (res) => {
+        this.dailyWeather.set(res);
         this.loading.set(false);
       },
       error: (err) => {
-        this.error.set('Ошибка загрузки прогноза');
+        console.error('Ошибка запроса:', err);
+        this.error.set('Не удалось загрузить данные о погоде.');
         this.loading.set(false);
-        console.error(err);
       },
     });
+  }
+
+  getDefaultWeather(): CurrentResponseInterface {
+    return {
+      name: '',
+      sys: {country: ''},
+      main: {
+        temp: 0,
+        temp_min: 0,
+        temp_max: 0,
+        humidity: 0,
+        pressure: 0,
+        feels_like: 0,
+      },
+      wind: {speed: 0},
+      weather: [{description: '', icon: ''}]
+    };
   }
 }

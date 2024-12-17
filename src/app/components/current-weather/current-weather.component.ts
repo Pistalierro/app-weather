@@ -1,27 +1,48 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, computed, inject, OnInit} from '@angular/core';
 import {WeatherService} from '../../services/weather.service';
-import {DatePipe, NgForOf, NgIf} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {animate, style, transition, trigger} from '@angular/animations';
+import {DecimalPipe, NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-current-weather',
   standalone: true,
   imports: [
+    FormsModule,
     NgIf,
-    NgForOf,
-    DatePipe
+    DecimalPipe
   ],
   templateUrl: './current-weather.component.html',
-  styleUrl: './current-weather.component.scss'
+  styleUrl: './current-weather.component.scss',
+  animations: [
+    trigger('fade', [
+      transition(':enter', [
+        style({opacity: 0}),
+        animate('0.5s ease-in', style({opacity: 1}))
+      ])
+    ])
+  ]
 })
+
 export class CurrentWeatherComponent implements OnInit {
   city: string = 'Kyiv';
-  private weatherService = inject(WeatherService);
+  protected weatherService = inject(WeatherService);
+  currentWeather = computed(() =>
+    this.weatherService.currentWeather() || this.weatherService.getDefaultWeather()
+  );
 
-  weather = this.weatherService.currentWeather;
   loading = this.weatherService.loading;
   error = this.weatherService.error;
+  dailyWeather = this.weatherService.dailyWeather;
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.weatherService.fetchCurrentWeather(this.city);
+    this.weatherService.fetchCurrentWeather(this.city);
+    this.weatherService.getDailyWeather(50.45, 30.52, this.city);
+  }
+
+  fetchWeather() {
     this.weatherService.fetchCurrentWeather(this.city);
   }
+
 }
