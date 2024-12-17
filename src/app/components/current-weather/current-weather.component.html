@@ -1,8 +1,9 @@
 <div class="text-center mb-6">
-  <input (keydown.enter)="fetchWeather()" [(ngModel)]="city" class="border p-2 rounded w-64" placeholder="Введите название города"
+  <input (keydown.enter)="fetchWeather()" [(ngModel)]="city" class="border mb-3 p-2 rounded w-full sm:w-64"
+         placeholder="Введите название города"
          type="text"/>
   <button (click)="fetchWeather()" (keydown.enter)="fetchWeather()"
-          class="ml-4 bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 transition">
+          class="sm:ml-4 bg-blue-500 w-full sm:w-44 text-white  px-4 py-2 rounded shadow hover:bg-blue-600 transition">
     Показать погоду
   </button>
 </div>
