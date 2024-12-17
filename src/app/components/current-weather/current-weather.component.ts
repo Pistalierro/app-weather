@@ -3,7 +3,6 @@ import {WeatherService} from '../../services/weather.service';
 import {FormsModule} from '@angular/forms';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {DecimalPipe, NgIf} from '@angular/common';
-import {GeocodingService} from '../../services/geocoding.service';
 
 @Component({
   selector: 'app-current-weather',
@@ -34,13 +33,12 @@ export class CurrentWeatherComponent implements OnInit {
   loading = this.weatherService.loading;
   error = this.weatherService.error;
   dailyWeather = this.weatherService.dailyWeather;
-  private geocodingService = inject(GeocodingService);
 
   constructor() {
     effect(() => {
-        const {lat, lon} = this.geocodingService.coordinates();
-        if (lat && lon) {
-          this.weatherService.fetchCurrentWeather(this.city);
+        const weather = this.weatherService.currentWeather();
+        if (weather?.coord) {
+          const {lat, lon} = weather.coord;
           this.weatherService.fetchDailyWeather(lat, lon);
         }
       },
@@ -49,12 +47,10 @@ export class CurrentWeatherComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.weatherService.fetchCurrentWeather(this.city);
-    this.weatherService.fetchDailyWeather(50.45, 30.52);
+    this.fetchWeather();
   }
 
   fetchWeather(): void {
-    this.geocodingService.getCoordinates(this.city);
+    this.weatherService.fetchCurrentWeather(this.city);
   }
-
 }

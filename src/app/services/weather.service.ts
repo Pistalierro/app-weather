@@ -28,6 +28,8 @@ export class WeatherService {
       next: (res: CurrentResponseInterface) => {
         this.currentWeather.set(res);
         this.loading.set(false);
+        const {lat, lon} = res.coord;
+        this.fetchDailyWeather(lat, lon);
       },
       error: (err) => {
         console.error('Ошибка запроса:', err);
@@ -49,6 +51,10 @@ export class WeatherService {
   getDefaultWeather(): CurrentResponseInterface {
     return {
       name: '',
+      coord: {
+        lat: 0,
+        lon: 0
+      },
       sys: {country: ''},
       main: {
         temp: 0,

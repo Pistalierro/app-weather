@@ -1,5 +1,9 @@
 export interface CurrentResponseInterface {
   name: string;
+  coord: {
+    lat: number;
+    lon: number;
+  };
   sys: {
     country: string;
   };
