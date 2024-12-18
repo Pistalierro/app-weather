@@ -3,6 +3,7 @@ import {WeatherService} from '../../services/weather.service';
 import {FormsModule} from '@angular/forms';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {DecimalPipe, NgIf} from '@angular/common';
+import {GeolocationService} from '../../services/geolocation.service';
 
 @Component({
   selector: 'app-current-weather',
@@ -25,7 +26,8 @@ import {DecimalPipe, NgIf} from '@angular/common';
 })
 
 export class CurrentWeatherComponent implements OnInit {
-  city: string = 'Kyiv';
+  city: string = '';
+
   private weatherService = inject(WeatherService);
   currentWeather = computed(() =>
     this.weatherService.currentWeather() || this.weatherService.getDefaultWeather()
@@ -33,13 +35,14 @@ export class CurrentWeatherComponent implements OnInit {
   loading = this.weatherService.loading;
   error = this.weatherService.error;
   dailyWeather = this.weatherService.dailyWeather;
+  private geolocationService = inject(GeolocationService);
 
   constructor() {
     effect(() => {
-        const weather = this.weatherService.currentWeather();
-        if (weather?.coord) {
-          const {lat, lon} = weather.coord;
-          this.weatherService.fetchDailyWeather(lat, lon);
+        const coords = this.geolocationService.coordinates();
+        if (coords.lat && coords.lon) {
+          this.weatherService.fetchCurrentWeatherByCoords(coords.lat, coords.lon);
+          this.weatherService.fetchDailyWeather(coords.lat, coords.lon);
         }
       },
       {allowSignalWrites: true}
@@ -47,11 +50,11 @@ export class CurrentWeatherComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.fetchWeather();
+    this.geolocationService.getCurrentLocation();
   }
 
-  fetchWeather(): void {
-    this.weatherService.fetchCurrentWeather(this.city);
+  fetchWeatherByCity(): void {
+    if (this.city.length > 0) this.weatherService.fetchCurrentWeatherByCity(this.city);
   }
 
   getWeatherVideo(weather: any): string {

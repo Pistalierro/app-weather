@@ -2,6 +2,7 @@ import {inject, Injectable, signal} from '@angular/core';
 import {apiConfig} from '../app.config';
 import {HttpClient} from '@angular/common/http';
 import {CurrentResponseInterface} from '../models/current-response.interface';
+import {GeolocationService} from './geolocation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +18,13 @@ export class WeatherService {
   private apiUrlOpenMeteo: string = apiConfig.apiUrlOpenMeteo;
   private apiKey: string = apiConfig.apiKeyOpenWeatherMa;
   private http = inject(HttpClient);
+  private geolocationService = inject(GeolocationService);
 
-  fetchCurrentWeather(city: string): void {
+  get coordinates() {
+    return this.geolocationService.coordinates();
+  }
+
+  fetchCurrentWeatherByCity(city: string): void {
     this.loading.set(true);
     this.error.set(null);
 
@@ -37,6 +43,24 @@ export class WeatherService {
         this.error.set('Не удалось загрузить данные о погоде.');
         this.loading.set(false);
       },
+    });
+  }
+
+  fetchCurrentWeatherByCoords(lat: number, lon: number): void {
+    this.loading.set(true);
+    this.error.set(null);
+
+    const url = `${this.apiUrlCurrent}/weather?lat=${lat}&lon=${lon}&appid=${this.apiKey}&units=metric&lang=ru`;
+
+    this.http.get<CurrentResponseInterface>(url).subscribe({
+      next: (res: CurrentResponseInterface) => {
+        this.currentWeather.set(res);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.error.set('Не удалось загрузить текущую погоду.');
+        this.loading.set(false);
+      }
     });
   }
 
