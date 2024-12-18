@@ -1,4 +1,4 @@
-import {Component, computed, effect, inject, OnInit} from '@angular/core';
+import {Component, effect, inject, OnInit} from '@angular/core';
 import {WeatherService} from '../../services/weather.service';
 import {FormsModule} from '@angular/forms';
 import {animate, style, transition, trigger} from '@angular/animations';
@@ -26,13 +26,10 @@ import {GeolocationService} from '../../services/geolocation.service';
 })
 
 export class CurrentWeatherComponent implements OnInit {
-  city: string = '';
-
+  city!: string;
   private weatherService = inject(WeatherService);
-  currentWeather = computed(() =>
-    this.weatherService.currentWeather() || this.weatherService.getDefaultWeather()
-  );
   loading = this.weatherService.loading;
+  currentWeather = this.weatherService.currentWeather;
   error = this.weatherService.error;
   dailyWeather = this.weatherService.dailyWeather;
   private geolocationService = inject(GeolocationService);
@@ -59,6 +56,7 @@ export class CurrentWeatherComponent implements OnInit {
 
   getWeatherVideo(weather: any): string {
     if (!weather) return '/video/default.mp4';
+
     const id = weather.id;
 
     if (id >= 200 && id <= 232) return '/video/thunderstorm.mp4';

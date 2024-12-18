@@ -8,26 +8,26 @@
   </button>
 </div>
 
-<div *ngIf="currentWeather() && !loading() && !error()" @fade
-     class="weather-container relative text-white text-shadow-lg overflow-hidden text-center p-6 rounded-lg shadow-lg max-w-md mx-auto">
+<div *ngIf="currentWeather() as weather; else loadingOrError" @fade
+     class="weather-container relative text-white text-shadow-lg overflow-hidden text-center p-6 rounded-lg shadow-md max-w-md mx-auto">
 
   <video autoplay class="absolute inset-0 w-full h-full object-cover -z-10" loop muted playsinline preload="auto">
-    <source [src]="getWeatherVideo(currentWeather().weather[0])" type="video/mp4">
+    <source [src]="getWeatherVideo(weather.weather[0])" type="video/mp4">
     Ваш браузер не поддерживает видео.
   </video>
 
   <h1 class="city text-2xl font-bold">
-    {{ currentWeather().name }}
-    <img *ngIf="currentWeather().sys.country"
-         [src]="'https://flagcdn.com/32x24/' + currentWeather().sys.country.toLowerCase() + '.png'"
-         alt="{{ currentWeather().sys.country }}"
+    {{ weather.name }}
+    <img *ngIf="weather.sys.country"
+         [src]="'https://flagcdn.com/32x24/' + weather.sys.country.toLowerCase() + '.png'"
+         alt="{{ weather.sys.country }}"
          class="inline w-6 h-4 ml-2">
   </h1>
 
   <div class="mb-3">
-    <p class="text-6xl font-semibold my-4">{{ currentWeather().main.temp | number: '1.0-0' }}°</p>
-    <p class="text-md mb-3 font-semibold">{{ currentWeather().weather[0].description }}</p>
-    <p class="text-md font-light">По ощущениям как {{ currentWeather().main.feels_like | number: '1.0-0' }}°</p>
+    <p class="text-6xl font-semibold my-4">{{ weather.main.temp | number: '1.0-0' }}°</p>
+    <p class="text-md mb-3 font-semibold">{{ weather.weather[0].description }}</p>
+    <p class="text-md font-light">По ощущениям как {{ weather.main.feels_like | number: '1.0-0' }}°</p>
   </div>
 
 
@@ -37,16 +37,18 @@
   </div>
 
   <div class="details mt-3 grid grid-cols-2 justify-between gap-2 text-left text-sm">
-    <span>Ветер:</span><span class="text-right font-medium">{{ currentWeather().wind.speed | number: '1.0-0' }} м/с</span>
-    <span>Давление:</span><span class="text-right font-medium">{{ currentWeather().main.pressure }} гПа</span>
-    <span>Влажность:</span><span class="text-right font-medium">{{ currentWeather().main.humidity }}%</span>
+    <span>Ветер:</span><span class="text-right font-medium">{{ weather.wind.speed | number: '1.0-0' }} м/с</span>
+    <span>Давление:</span><span class="text-right font-medium">{{ weather.main.pressure }} гПа</span>
+    <span>Влажность:</span><span class="text-right font-medium">{{ weather.main.humidity }}%</span>
   </div>
 </div>
 
-<div *ngIf="loading()" class="loading text-gray-500 text-center">
-  Загрузка данных...
-</div>
-<div *ngIf="error()" class="error text-red-500 text-center">
-  {{ error() }}
-</div>
+<ng-template #loadingOrError>
+  <div *ngIf="loading()" class="loading text-gray-500 text-center">
+    Загрузка данных...
+  </div>
+  <div *ngIf="!loading() && error()" class="error text-red-500 text-center">
+    {{ error() }}
+  </div>
+</ng-template>
 
