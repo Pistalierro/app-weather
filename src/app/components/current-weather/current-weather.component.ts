@@ -55,28 +55,21 @@ export class CurrentWeatherComponent implements OnInit {
   }
 
   getWeatherVideo(weather: any): string {
-    if (!weather) {
-      return '/video/default.mp4';
-    }
+    if (!weather) return '/video/default.mp4';
+    const id = weather.id;
 
-    const description = weather.description;
-    const videoMap: Record<string, string> = {
-      'ясно': '/video/clear.mp4',
-      'пасмурно': '/video/partly-cloudy.mp4',
-      'небольшая облачность': '/video/slightly-cloudy.mp4',
-      'переменная облачность': '/video/partly-cloudy.mp4',
-      'облачно': '/video/clouds.mp4',
-      'туман': '/video/atmosphere.mp4',
-      'дымка': '/video/atmosphere.mp4',
-      'пыль': '/video/atmosphere.mp4',
-      'дождь': '/video/rain.mp4',
-      'небольшой дождь': '/video/drizzle.mp4',
-      'гроза': '/video/thunderstorm.mp4',
-      'снег': '/video/snow.mp4'
-    };
-    
-    return videoMap[description] || '/video/default.mp4';
+    if (id >= 200 && id <= 232) return '/video/thunderstorm.mp4';
+    if (id >= 300 && id <= 321) return '/video/drizzle.mp4';
+    if (id >= 500 && id <= 531) return '/video/rain.mp4';
+    if (id >= 600 && id <= 616) return '/video/snow.mp4';
+    if (id >= 620 && id <= 622) return '/video/snowfall.mp4';
+    if (id >= 701 && id <= 781) return '/video/mist.mp4';
+    if (id === 800) return '/video/clear.mp4';
+    if (id === 801) return '/video/few-clouds.mp4';
+    if (id === 802) return '/video/scattered-clouds.mp4';
+    if (id === 803) return '/video/slightly-cloudy.mp4';
+    if (id === 804) return '/video/partly-cloudy.mp4';
+
+    return '/video/default.mp4';
   }
-
-
 }
