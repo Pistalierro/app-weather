@@ -53,4 +53,30 @@ export class CurrentWeatherComponent implements OnInit {
   fetchWeather(): void {
     this.weatherService.fetchCurrentWeather(this.city);
   }
+
+  getWeatherVideo(weather: any): string {
+    if (!weather) {
+      return '/video/default.mp4';
+    }
+
+    const description = weather.description;
+    const videoMap: Record<string, string> = {
+      'ясно': '/video/clear.mp4',
+      'пасмурно': '/video/partly-cloudy.mp4',
+      'небольшая облачность': '/video/slightly-cloudy.mp4',
+      'переменная облачность': '/video/partly-cloudy.mp4',
+      'облачно': '/video/clouds.mp4',
+      'туман': '/video/atmosphere.mp4',
+      'дымка': '/video/atmosphere.mp4',
+      'пыль': '/video/atmosphere.mp4',
+      'дождь': '/video/rain.mp4',
+      'небольшой дождь': '/video/drizzle.mp4',
+      'гроза': '/video/thunderstorm.mp4',
+      'снег': '/video/snow.mp4'
+    };
+    
+    return videoMap[description] || '/video/default.mp4';
+  }
+
+
 }

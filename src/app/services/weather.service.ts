@@ -22,12 +22,13 @@ export class WeatherService {
     this.loading.set(true);
     this.error.set(null);
 
-    const url = `${this.apiUrlCurrent}/weather?q=${city}&appid=${this.apiKey}&units=metric`;
+    const url = `${this.apiUrlCurrent}/weather?q=${city}&appid=${this.apiKey}&units=metric&lang=ru`;
 
     this.http.get<CurrentResponseInterface>(url).subscribe({
       next: (res: CurrentResponseInterface) => {
         this.currentWeather.set(res);
         this.loading.set(false);
+        console.log(res.weather[0].description);
         const {lat, lon} = res.coord;
         this.fetchDailyWeather(lat, lon);
       },
