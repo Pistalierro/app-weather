@@ -2,7 +2,6 @@ import {inject, Injectable, signal} from '@angular/core';
 import {apiConfig} from '../app.config';
 import {HttpClient} from '@angular/common/http';
 import {CurrentResponseInterface} from '../models/current-response.interface';
-import {GeolocationService} from './geolocation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,11 +17,6 @@ export class WeatherService {
   private apiUrlOpenMeteo: string = apiConfig.apiUrlOpenMeteo;
   private apiKey: string = apiConfig.apiKeyOpenWeatherMa;
   private http = inject(HttpClient);
-  private geolocationService = inject(GeolocationService);
-
-  get coordinates() {
-    return this.geolocationService.coordinates();
-  }
 
   fetchCurrentWeatherByCity(city: string): void {
     this.loading.set(true);

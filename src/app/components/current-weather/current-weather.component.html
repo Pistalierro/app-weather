@@ -24,10 +24,10 @@
          class="inline w-6 h-4 ml-2">
   </h1>
 
-  <div class="mb-3">
-    <p class="text-6xl font-semibold my-4">{{ weather.main.temp | number: '1.0-0' }}°</p>
-    <p class="text-md mb-3 font-semibold">{{ weather.weather[0].description }}</p>
-    <p class="text-md font-light">По ощущениям как {{ weather.main.feels_like | number: '1.0-0' }}°</p>
+  <div class="mb-3 grid grid-cols-1 gap-3">
+    <p class="text-6xl font-semibold">{{ weather.main.temp | number: '1.0-0' }}°</p>
+    <p class="text-md first-letter:capitalize ">{{ weather.weather[0].description }}</p>
+    <p class="text-md ">По ощущениям как {{ weather.main.feels_like | number: '1.0-0' }}°</p>
   </div>
 
 
