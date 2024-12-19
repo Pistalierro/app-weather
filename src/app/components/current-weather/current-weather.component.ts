@@ -88,4 +88,10 @@ export class CurrentWeatherComponent implements OnInit {
     return null;
   }
 
+  getWindDirection(degrees: number): string {
+    const directions = ['Северный', 'Северо-восточный', 'Восточный', 'Юго-восточный', 'Южный', 'Юго-западный', 'Западный', 'Северо-западный'];
+    const index = Math.round(degrees / 45) % 8;
+    return directions[index];
+  }
+
 }

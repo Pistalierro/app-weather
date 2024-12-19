@@ -21,6 +21,7 @@ export interface CurrentResponseInterface {
   };
   wind: {
     speed: number;
+    deg: number;
   };
   weather: Array<{
     description: string;

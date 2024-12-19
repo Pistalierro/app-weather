@@ -59,9 +59,14 @@
 
   <!-- Нижний блок -->
   <div class="details relative z-10 mt-3 grid grid-cols-2 gap-2 text-left text-sm sm:text-base md:text-lg pb-6 px-4 sm:px-8">
-    <span>Ветер:</span><span class="text-right font-medium">{{ weather.wind.speed | number: '1.0-0' }} м/с</span>
+    <span>Ветер:</span>
+    <span class="text-right font-medium">
+      {{ weather.wind.speed | number: '1.0-0' }} м/с
+      <span *ngIf="weather.wind.deg">, {{ getWindDirection(weather.wind.deg) }}</span>
+    </span>
     <span>Давление:</span><span class="text-right font-medium">{{ weather.main.pressure }} гПа</span>
     <span>Влажность:</span><span class="text-right font-medium">{{ weather.main.humidity }}%</span>
+   
   </div>
 </div>
 
