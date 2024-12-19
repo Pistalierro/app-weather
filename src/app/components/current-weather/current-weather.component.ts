@@ -53,7 +53,11 @@ export class CurrentWeatherComponent implements OnInit {
   }
 
   fetchWeatherByCity(): void {
-    if (this.city.length > 0) this.weatherService.fetchCurrentWeatherByCity(this.city);
+    if (this.city.length > 0) {
+      this.weatherService.fetchCurrentWeatherByCity(this.city);
+      this.city = '';
+    }
+
   }
 
   getWeatherVideo(weather: any): string {

@@ -5,23 +5,34 @@
          playsinline preload="auto" type="video/mp4">Ваш браузер не поддерживает видео.
   </video>
 
-  <!-- Ввод города и кнопка -->
-  <div class="relative z-10 p-4 text-lg">
-    <div class="mb-6 flex flex-col justify-center sm:flex-row items-center gap-4">
-      <input (keydown.enter)="fetchWeatherByCity()" [(ngModel)]="city"
-             class="border bg-transparent text-white placeholder-white placeholder:text-center mb-3 sm:mb-0 px-4 py-2 rounded w-full sm:w-64 md:w-80 lg:w-96"
-             placeholder="Введите название города"
-             type="text"/>
-      <button (click)="fetchWeatherByCity()" (keydown.enter)="fetchWeatherByCity()"
-              class="bg-transparent border border-white hover:border-gray-500 text-white w-full sm:w-44 md:w-56 px-4 py-2 rounded bg-white bg-opacity-30 hover:bg-white hover:bg-opacity-50 hover:text-gray-500 transition">
-        Поиск по погоду
+  <div class="flex w-full justify-center mb-8">
+    <!-- Контейнер с overflow-hidden -->
+    <div class="relative w-full sm:w-64 md:w-80 lg:w-96 overflow-hidden rounded">
+      <!-- Инпут -->
+      <input
+        (keydown.enter)="fetchWeatherByCity()"
+        [(ngModel)]="city"
+        class="border bg-transparent text-white placeholder-white placeholder:text-center px-4 py-2 pr-16 rounded w-full"
+        placeholder="Введите название города"
+        type="text"
+      />
+      <!-- Кнопка -->
+      <button
+        (click)="fetchWeatherByCity()"
+        aria-label="Поиск"
+        class="absolute top-0 right-0 h-full w-12 bg-white bg-opacity-20 text-white border-l border-white hover:bg-white hover:bg-opacity-60 transition"
+      >
+        <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+             xmlns="http://www.w3.org/2000/svg">
+          <path d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 100-15 7.5 7.5 0 000 15z" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </button>
     </div>
   </div>
 
 
   <!-- Центральный блок -->
-  <div class="relative z-10 flex-grow flex flex-col items-center justify-start text-center px-4 sm:px-8">
+  <div class="relative mt-[100px] z-10 flex-grow flex flex-col items-center justify-start text-center px-4 sm:px-8">
     <h1 class="city text-3xl sm:text-4xl md:text-5xl font-bold">
       {{ weather.name }}
       <img *ngIf="weather.sys.country"
