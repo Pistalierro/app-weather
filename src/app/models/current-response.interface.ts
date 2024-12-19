@@ -21,5 +21,6 @@ export interface CurrentResponseInterface {
   weather: Array<{
     description: string;
     icon: string;
+    id: number;
   }>;
 }

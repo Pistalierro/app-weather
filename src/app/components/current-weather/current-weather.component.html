@@ -11,9 +11,8 @@
 <div *ngIf="currentWeather() as weather; else loadingOrError" @fade
      class="weather-container relative text-white text-shadow-lg overflow-hidden text-center p-6 rounded-lg shadow-md max-w-md mx-auto">
 
-  <video autoplay class="absolute inset-0 w-full h-full object-cover -z-10" loop muted playsinline preload="auto">
-    <source [src]="getWeatherVideo(weather.weather[0])" type="video/mp4">
-    Ваш браузер не поддерживает видео.
+  <video [src]="getWeatherVideo(weather.weather[0])" autoplay class="absolute inset-0 w-full h-full object-cover -z-10" loop muted
+         playsinline preload="auto" type="video/mp4">Ваш браузер не поддерживает видео.
   </video>
 
   <h1 class="city text-2xl font-bold">
