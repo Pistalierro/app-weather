@@ -1,45 +1,53 @@
-<div class="text-center mb-6">
-  <input (keydown.enter)="fetchWeatherByCity()" [(ngModel)]="city" class="border mb-3 p-2 rounded w-full sm:w-64"
-         placeholder="Введите название города"
-         type="text"/>
-  <button (click)="fetchWeatherByCity()" (keydown.enter)="fetchWeatherByCity()"
-          class="sm:ml-4 bg-blue-500 w-full sm:w-44 text-white  px-4 py-2 rounded shadow hover:bg-blue-600 transition">
-    Показать погоду
-  </button>
-</div>
-
-<div *ngIf="currentWeather() as weather; else loadingOrError" @fade
-     class="weather-container relative text-white text-shadow-lg overflow-hidden text-center p-6 rounded-lg shadow-md max-w-md mx-auto">
+<div *ngIf="currentWeather() as weather; else loadingOrError"
+     class="weather-container relative text-white text-shadow-lg overflow-hidden text-center min-h-screen p-6 max-w-full mx-auto flex flex-col justify-between">
 
   <video [src]="getWeatherVideo(weather.weather[0])" autoplay class="absolute inset-0 w-full h-full object-cover -z-10" loop muted
          playsinline preload="auto" type="video/mp4">Ваш браузер не поддерживает видео.
   </video>
 
-  <h1 class="city text-2xl font-bold">
-    {{ weather.name }}
-    <img *ngIf="weather.sys.country"
-         [src]="'https://flagcdn.com/32x24/' + weather.sys.country.toLowerCase() + '.png'"
-         alt="{{ weather.sys.country }}"
-         class="inline w-6 h-4 ml-2">
-  </h1>
-
-  <div class="mb-3 grid grid-cols-1 gap-3">
-    <p class="text-6xl font-semibold">{{ weather.main.temp | number: '1.0-0' }}°</p>
-    <p class="text-md first-letter:capitalize ">{{ weather.weather[0].description }}</p>
-    <p class="text-md ">По ощущениям как {{ weather.main.feels_like | number: '1.0-0' }}°</p>
+  <!-- Ввод города и кнопка -->
+  <div class="relative z-10 p-4 text-lg">
+    <div class="mb-6 flex flex-col justify-center sm:flex-row items-center gap-4">
+      <input (keydown.enter)="fetchWeatherByCity()" [(ngModel)]="city"
+             class="border bg-transparent text-white placeholder-white placeholder:text-center mb-3 sm:mb-0 px-4 py-2 rounded w-full sm:w-64 md:w-80 lg:w-96"
+             placeholder="Введите название города"
+             type="text"/>
+      <button (click)="fetchWeatherByCity()" (keydown.enter)="fetchWeatherByCity()"
+              class="bg-transparent border border-white hover:border-gray-500 text-white w-full sm:w-44 md:w-56 px-4 py-2 rounded bg-white bg-opacity-30 hover:bg-white hover:bg-opacity-50 hover:text-gray-500 transition">
+        Поиск по погоду
+      </button>
+    </div>
   </div>
 
 
-  <div class="flex items-center justify-around">
-    <span>Макс. {{ dailyWeather()?.daily.temperature_2m_max?.[0] | number: '1.0-0' }}°</span>
-    <span>Мин. {{ dailyWeather()?.daily.temperature_2m_min?.[0] | number: '1.0-0' }}°</span>
+  <!-- Центральный блок -->
+  <div class="relative z-10 flex-grow flex flex-col items-center justify-start text-center px-4 sm:px-8">
+    <h1 class="city text-3xl sm:text-4xl md:text-5xl font-bold">
+      {{ weather.name }}
+      <img *ngIf="weather.sys.country"
+           [src]="'https://flagcdn.com/32x24/' + weather.sys.country.toLowerCase() + '.png'"
+           alt="{{ weather.sys.country }}"
+           class="inline w-6 h-4 ml-2">
+    </h1>
+    <div class="mb-3 grid grid-cols-1 gap-8 text-xl sm:text-2xl md:text-3xl">
+      <p class="text-5xl sm:text-6xl md:text-7xl font-semibold">{{ weather.main.temp | number: '1.0-0' }}°</p>
+      <p class="first-letter:capitalize">{{ weather.weather[0].description }}</p>
+      <p>По ощущениям как {{ weather.main.feels_like | number: '1.0-0' }}°</p>
+    </div>
+    <div class="flex items-center justify-around w-full text-lg sm:text-xl md:text-2xl gap-4">
+      <span>Макс.: {{ dailyWeather()?.daily.temperature_2m_max?.[0] | number: '1.0-0' }}°</span>
+      <span>Мин.: {{ dailyWeather()?.daily.temperature_2m_min?.[0] | number: '1.0-0' }}°</span>
+    </div>
   </div>
 
-  <div class="details mt-3 grid grid-cols-2 justify-between gap-2 text-left text-sm">
+
+  <!-- Нижний блок -->
+  <div class="details relative z-10 mt-3 grid grid-cols-2 gap-2 text-left text-sm sm:text-base md:text-lg pb-6 px-4 sm:px-8">
     <span>Ветер:</span><span class="text-right font-medium">{{ weather.wind.speed | number: '1.0-0' }} м/с</span>
     <span>Давление:</span><span class="text-right font-medium">{{ weather.main.pressure }} гПа</span>
     <span>Влажность:</span><span class="text-right font-medium">{{ weather.main.humidity }}%</span>
   </div>
+
 </div>
 
 <ng-template #loadingOrError>
@@ -50,4 +58,3 @@
     {{ error() }}
   </div>
 </ng-template>
-
