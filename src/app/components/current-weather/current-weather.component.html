@@ -1,5 +1,5 @@
 <div *ngIf="currentWeather() as weather; else loadingOrError"
-     class="weather-container relative text-white text-shadow-lg overflow-hidden text-center min-h-screen p-6 max-w-full mx-auto flex flex-col justify-between">
+     class="weather-container relative text-white text-shadow-lg overflow-hidden text-center min-vh-screen p-6 max-w-full mx-auto flex flex-col justify-between">
 
   <video [src]="getWeatherVideo(weather.weather[0])" autoplay class="absolute inset-0 w-full h-full object-cover -z-10" loop muted
          playsinline preload="auto" type="video/mp4">Ваш браузер не поддерживает видео.
