@@ -65,4 +65,27 @@ export class CurrentWeatherComponent implements OnInit {
 
     return getWeatherVideoById(weather.id);
   }
+
+  getSunriseTime(): string | null {
+    const weather = this.currentWeather();
+    if (weather && weather.sys && weather.sys.sunrise) {
+      return new Date(weather.sys.sunrise * 1000).toLocaleTimeString('ru-RU', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+    return null;
+  }
+
+  getSunsetTime(): string | null {
+    const weather = this.currentWeather();
+    if (weather && weather.sys && weather.sys.sunset) {
+      return new Date(weather.sys.sunset * 1000).toLocaleTimeString('ru-RU', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+    return null;
+  }
+
 }

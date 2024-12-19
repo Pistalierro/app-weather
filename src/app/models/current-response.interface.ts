@@ -5,7 +5,11 @@ export interface CurrentResponseInterface {
     lon: number;
   };
   sys: {
+    type?: number;
+    id?: number;
     country: string;
+    sunrise: number;
+    sunset: number;
   };
   main: {
     temp: number;
