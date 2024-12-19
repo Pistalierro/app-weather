@@ -10,6 +10,14 @@ export const apiConfig = {
   apiUrlOpenMeteo: 'https://api.open-meteo.com/v1/forecast'
 };
 
+function setViewportHeight(): void {
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+
+window.addEventListener('resize', setViewportHeight);
+setViewportHeight();
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
