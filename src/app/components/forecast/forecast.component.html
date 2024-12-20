@@ -1,5 +1,5 @@
 <div *ngIf="forecastWeather()"
-     class="hourly-weather-container relative text-gray-200  mx-auto w-full max-w-screen-2xl">
+     class="hourly-weather-container relative text-gray-200  mx-auto w-full max-w-full">
 
   <div #scrollContainer class="hourly-weather-scroll flex overflow-x-auto space-x-4 px-4 bg-white border bg-opacity-40 rounded-lg">
     <div *ngFor="let hour of getEnhancedForecast()"

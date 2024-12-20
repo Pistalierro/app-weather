@@ -1,1 +1,25 @@
-<app-current-weather></app-current-weather>
+<div class="weather-container relative min-vh-screen flex text-shadow-lg flex-col justify-between text-white p-8">
+  <!-- Видео для заднего фона -->
+  <video [src]="getCurrentVideo()" autoplay class="absolute inset-0 w-full h-full object-cover -z-10" loop muted playsinline preload="auto">
+    Ваш браузер не поддерживает видео.
+  </video>
+
+  <!-- Состояния приложения -->
+  <ng-container>
+    <!-- Если идет загрузка -->
+    <div *ngIf="loading" class="loading text-gray-500 text-center">
+      Загрузка данных...
+    </div>
+
+    <!-- Если есть ошибка -->
+    <div *ngIf="error && !loading" class="error text-red-500 text-center">
+      {{ error }}
+    </div>
+
+    <!-- Основной контент -->
+    <ng-container *ngIf="!loading && !error">
+      <app-current-weather></app-current-weather>
+      <app-forecast></app-forecast>
+    </ng-container>
+  </ng-container>
+</div>

@@ -1,9 +1,5 @@
 <div *ngIf="currentWeather() as weather; else loadingOrError"
-     class="weather-container relative text-white text-shadow-lg overflow-hidden text-center min-vh-screen px-2 sm:px6 py-4 sm:py-6 max-w-full mx-auto flex flex-col justify-between">
-
-  <video [src]="getWeatherVideo(weather.weather[0])" autoplay class="absolute inset-0 w-full h-full object-cover -z-10" loop muted
-         playsinline preload="auto" type="video/mp4">Ваш браузер не поддерживает видео.
-  </video>
+     class="weather-container relative text-white text-shadow-lg overflow-hidden text-center min-h-full  sm:px6 py-4 sm:py-6 max-w-full mx-auto flex flex-col justify-between">
 
   <div class="flex w-full justify-center mb-8">
     <!-- Контейнер с overflow-hidden -->
@@ -59,7 +55,7 @@
     </div>
   </div>
   <!-- Нижний блок -->
-  <div class="details relative z-10 mt-3 grid grid-cols-2 gap-2 text-left text-sm sm:text-base md:text-lg pb-6 px-2 sm:px-6">
+  <div class="details relative z-10 mt-3 grid grid-cols-2 gap-2 text-left text-sm sm:text-base md:text-lg pb-6">
     <span>Ветер:</span>
     <span class="text-right font-medium">
       {{ weather.wind.speed | number: '1.0-0' }} м/с
@@ -68,9 +64,7 @@
     <span>Давление:</span><span class="text-right font-medium">{{ weather.main.pressure }} гПа</span>
     <span>Влажность:</span><span class="text-right font-medium">{{ weather.main.humidity }}%</span>
   </div>
-  <div class="mt-4 px-2 sm:px-6 max-w-full overflow-x-auto mx-auto">
-    <app-forecast [resetScroll]="shouldResetScroll"></app-forecast>
-  </div>
+
 </div>
 
 <ng-template #loadingOrError>
