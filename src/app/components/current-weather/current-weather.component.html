@@ -32,7 +32,7 @@
 
 
   <!-- Центральный блок -->
-  <div class="relative  z-10 flex-grow flex flex-col items-center justify-start text-center px-4 sm:px-8">
+  <div class="relative mt-5 z-10 flex-grow flex flex-col items-center justify-start text-center px-4 sm:px-8">
     <h1 class="city text-3xl sm:text-4xl md:text-5xl font-bold">
       {{ weather.name }}
       <img *ngIf="weather.sys.country"
@@ -57,7 +57,7 @@
         <span>Закат: {{ getSunsetTime() }}</span>
       </div>
     </div>
-    <div class=" p-4 max-w-full overflow-x-auto mx-auto">
+    <div class="mt-4  max-w-full overflow-x-auto mx-auto">
       <app-forecast></app-forecast>
     </div>
   </div>

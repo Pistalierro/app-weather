@@ -1,19 +1,23 @@
-<div *ngIf="forecastWeather() as forecast"
-     class="hourly-weather-container relative text-gray-200 p-6 mx-auto w-full max-w-screen-2xl">
+<div *ngIf="forecastWeather()"
+     class="hourly-weather-container relative text-gray-200  mx-auto w-full max-w-screen-2xl">
 
-  <div class="hourly-weather-scroll flex overflow-x-auto px-4 bg-white border bg-opacity-20 rounded-lg">
+  <div class="hourly-weather-scroll flex overflow-x-auto space-x-4 px-4 bg-white border bg-opacity-20 rounded-lg">
     <div *ngFor="let hour of getDynamicForecast()"
-         class="hourly-weather-item flex-shrink-0  rounded-lg p-6 w-32 text-center flex flex-col items-center">
-      <p class="text-base sm:text-lg font-medium mb-2">
+         class="hourly-weather-item flex-shrink-0 rounded-lg p-4 w-28 text-center flex flex-col items-center sm:p-6 sm:w-36">
+      <!-- Время -->
+      <p class="text-sm font-medium mb-1 sm:text-base sm:mb-2">
         {{ hour.label || (hour.dt_txt | date: 'HH:mm') }}
       </p>
+      <!-- Иконка -->
       <img [src]="'https://openweathermap.org/img/wn/' + hour.weather[0].icon + '@2x.png'"
            alt="{{ hour.weather[0].description }}"
-           class="w-16 h-16 mb-3">
-      <p class="text-xl sm:text-2xl font-semibold mb-2">
+           class="w-12 h-12 mb-2 sm:w-16 sm:h-16 sm:mb-3">
+      <!-- Температура -->
+      <p class="text-lg font-semibold mb-1 sm:text-xl sm:mb-2">
         {{ hour.main.temp | number: '1.0-0' }}°
       </p>
-      <p class="text-sm sm:text-base capitalize text-center leading-tight">
+      <!-- Описание -->
+      <p class="text-sm first-letter:capitalize text-center leading-tight sm:text-lg">
         {{ hour.weather[0].description }}
       </p>
     </div>
