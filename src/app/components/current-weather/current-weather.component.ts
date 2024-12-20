@@ -5,6 +5,7 @@ import {animate, style, transition, trigger} from '@angular/animations';
 import {DecimalPipe, NgIf} from '@angular/common';
 import {GeolocationService} from '../../services/geolocation.service';
 import {getWeatherVideoById} from '../../utils/getWeatherVideo';
+import {ForecastComponent} from '../forecast/forecast.component';
 
 @Component({
   selector: 'app-current-weather',
@@ -12,7 +13,8 @@ import {getWeatherVideoById} from '../../utils/getWeatherVideo';
   imports: [
     FormsModule,
     NgIf,
-    DecimalPipe
+    DecimalPipe,
+    ForecastComponent
   ],
   templateUrl: './current-weather.component.html',
   styleUrl: './current-weather.component.scss',
@@ -52,12 +54,12 @@ export class CurrentWeatherComponent implements OnInit {
     this.geolocationService.getCurrentLocation();
   }
 
-  fetchWeatherByCity(): void {
+  fetchWeatherAndForecastByCity(): void {
     if (this.city.length > 0) {
-      this.weatherService.fetchCurrentWeatherByCity(this.city);
+      this.weatherService.fetchCurrentWeatherByCity(this.city.trim());
+      this.weatherService.fetchForecastWeatherByCity(this.city.trim());
       this.city = '';
     }
-
   }
 
   getWeatherVideo(weather: any): string {

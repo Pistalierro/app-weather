@@ -58,17 +58,6 @@ export class WeatherService {
     });
   }
 
-  fetchDailyWeather(lat: number, lon: number): void {
-    const url = `${this.apiUrlOpenMeteo}?latitude=${lat}&longitude=${lon}&daily=temperature_2m_min,temperature_2m_max&timezone=auto`;
-
-    this.http.get<DailyResponseInterface>(url).subscribe({
-      next: (res) => {
-        this.dailyWeather.set(res);
-      },
-      error: (err) => this.error.set('Ошибка получения прогноза погоды'),
-    });
-  }
-
   fetchForecastWeatherByCoords(lat: number, lon: number): void {
     this.loading.set(true);
     this.error.set(null);
@@ -84,6 +73,34 @@ export class WeatherService {
         this.error.set('Не удалось загрузить прогноз погоды.');
         this.loading.set(false);
       }
+    });
+  }
+
+  fetchForecastWeatherByCity(city: string): void {
+    this.loading.set(true);
+    this.error.set(null);
+    const url = `${this.apiUrlCurrent}/forecast?q=${city}&appid=${this.apiKey}&units=metric&lang=ru`;
+
+    this.http.get<ForecastResponseInterface>(url).subscribe({
+      next: (res: ForecastResponseInterface) => {
+        this.forecastWeather.set(res);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.error.set('Не удалось загрузить прогноз погоды.');
+        this.loading.set(false);
+      }
+    });
+  }
+
+  fetchDailyWeather(lat: number, lon: number): void {
+    const url = `${this.apiUrlOpenMeteo}?latitude=${lat}&longitude=${lon}&daily=temperature_2m_min,temperature_2m_max&timezone=auto`;
+
+    this.http.get<DailyResponseInterface>(url).subscribe({
+      next: (res) => {
+        this.dailyWeather.set(res);
+      },
+      error: (err) => this.error.set('Ошибка получения прогноза погоды'),
     });
   }
 }

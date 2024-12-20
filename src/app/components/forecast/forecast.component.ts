@@ -41,4 +41,18 @@ export class ForecastComponent implements OnInit {
   ngOnInit(): void {
     this.geolocationService.getCurrentLocation();
   }
+
+  getDynamicForecast(): any[] {
+    const forecast = this.weatherService.forecastWeather();
+    if (!forecast) return [];
+
+    const now = new Date();
+    const currentHour = now.getHours();
+    const filteredList = forecast.list.filter((item) => {
+      const forecastHour = new Date(item.dt_txt).getHours();
+      return forecastHour >= currentHour;
+    });
+    if (filteredList.length > 0) return [{label: 'Сейчас', ...filteredList[0]}, ...filteredList.slice(1)];
+    return filteredList;
+  }
 }

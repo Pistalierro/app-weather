@@ -1,14 +1,11 @@
 <div *ngIf="forecastWeather() as forecast"
-     class="hourly-weather-container relative text-gray-200 text-shadow-lg p-6 mx-auto w-full max-w-screen-lg">
-  <h2 class="text-xl sm:text-2xl md:text-3xl text-white font-bold mb-4 text-center">Почасовой прогноз</h2>
+     class="hourly-weather-container relative text-gray-200 p-6 mx-auto w-full max-w-screen-2xl">
 
-  <!-- Контейнер с горизонтальным скроллом -->
-  <div class="hourly-weather-scroll flex overflow-x-auto  p-4 bg-opacity-20 bg-white rounded-lg">
-    <!-- Элементы почасового прогноза -->
-    <div *ngFor="let hour of forecast.list | slice: 0:24"
-         class="hourly-weather-item flex-shrink-0 bg-black bg-opacity-50  p-6 w-32 text-center flex flex-col items-center">
+  <div class="hourly-weather-scroll flex overflow-x-auto px-4 bg-white border bg-opacity-20 rounded-lg">
+    <div *ngFor="let hour of getDynamicForecast()"
+         class="hourly-weather-item flex-shrink-0  rounded-lg p-6 w-32 text-center flex flex-col items-center">
       <p class="text-base sm:text-lg font-medium mb-2">
-        {{ hour.dt_txt | date: 'HH:mm' }}
+        {{ hour.label || (hour.dt_txt | date: 'HH:mm') }}
       </p>
       <img [src]="'https://openweathermap.org/img/wn/' + hour.weather[0].icon + '@2x.png'"
            alt="{{ hour.weather[0].description }}"

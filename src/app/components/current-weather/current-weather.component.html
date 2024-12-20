@@ -10,7 +10,7 @@
     <div class="relative w-full sm:w-64 md:w-80 lg:w-96 overflow-hidden rounded">
       <!-- Инпут -->
       <input
-        (keydown.enter)="fetchWeatherByCity()"
+        (keydown.enter)="fetchWeatherAndForecastByCity()"
         [(ngModel)]="city"
         class="border bg-transparent text-white placeholder-white placeholder:text-center px-4 py-2 pr-16 rounded w-full"
         placeholder="Введите название города"
@@ -18,7 +18,7 @@
       />
       <!-- Кнопка -->
       <button
-        (click)="fetchWeatherByCity()"
+        (click)="fetchWeatherAndForecastByCity()"
         aria-label="Поиск"
         class="absolute focus:border-white top-0 right-0 h-full w-12 bg-white bg-opacity-20 text-white border-l border-white hover:bg-white hover:bg-opacity-60 transition"
       >
@@ -32,7 +32,7 @@
 
 
   <!-- Центральный блок -->
-  <div class="relative mt-[100px] z-10 flex-grow flex flex-col items-center justify-start text-center px-4 sm:px-8">
+  <div class="relative  z-10 flex-grow flex flex-col items-center justify-start text-center px-4 sm:px-8">
     <h1 class="city text-3xl sm:text-4xl md:text-5xl font-bold">
       {{ weather.name }}
       <img *ngIf="weather.sys.country"
@@ -57,6 +57,9 @@
         <span>Закат: {{ getSunsetTime() }}</span>
       </div>
     </div>
+    <div class=" p-4 max-w-full overflow-x-auto mx-auto">
+      <app-forecast></app-forecast>
+    </div>
   </div>
   <!-- Нижний блок -->
   <div class="details relative z-10 mt-3 grid grid-cols-2 gap-2 text-left text-sm sm:text-base md:text-lg pb-6 px-4 sm:px-8">
@@ -67,7 +70,6 @@
     </span>
     <span>Давление:</span><span class="text-right font-medium">{{ weather.main.pressure }} гПа</span>
     <span>Влажность:</span><span class="text-right font-medium">{{ weather.main.humidity }}%</span>
-
   </div>
 </div>
 
