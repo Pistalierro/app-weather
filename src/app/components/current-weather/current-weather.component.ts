@@ -10,12 +10,7 @@ import {ForecastComponent} from '../forecast/forecast.component';
 @Component({
   selector: 'app-current-weather',
   standalone: true,
-  imports: [
-    FormsModule,
-    NgIf,
-    DecimalPipe,
-    ForecastComponent
-  ],
+  imports: [FormsModule, NgIf, DecimalPipe, ForecastComponent],
   templateUrl: './current-weather.component.html',
   styleUrl: './current-weather.component.scss',
   animations: [
@@ -31,6 +26,7 @@ import {ForecastComponent} from '../forecast/forecast.component';
 
 export class CurrentWeatherComponent implements OnInit {
   city!: string;
+  shouldResetScroll: boolean = false;
   private weatherService = inject(WeatherService);
   loading = this.weatherService.loading;
   currentWeather = this.weatherService.currentWeather;
@@ -59,6 +55,11 @@ export class CurrentWeatherComponent implements OnInit {
       this.weatherService.fetchCurrentWeatherByCity(this.city.trim());
       this.weatherService.fetchForecastWeatherByCity(this.city.trim());
       this.city = '';
+
+      this.shouldResetScroll = true;
+      setTimeout(() => {
+        this.shouldResetScroll = false;
+      }, 100);
     }
   }
 
