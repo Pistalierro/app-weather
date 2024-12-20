@@ -45,18 +45,19 @@
       <p class="first-letter:capitalize">{{ weather.weather[0].description }}</p>
       <p>По ощущениям как {{ weather.main.feels_like | number: '1.0-0' }}°</p>
     </div>
-    <div class="flex items-center justify-around w-full text-lg sm:text-xl md:text-2xl gap-4 mb-5">
-      <span>Макс.: {{ dailyWeather()?.daily.temperature_2m_max?.[0] | number: '1.0-0' }}°</span>
-      <span>Мин.: {{ dailyWeather()?.daily.temperature_2m_min?.[0] | number: '1.0-0' }}°</span>
+    <div *ngIf="dailyWeather() as dailyWeater" class="flex items-center justify-around w-full text-lg sm:text-xl md:text-2xl gap-4 mb-5">
+      <span>Макс.: {{ dailyWeater.daily.temperature_2m_max[0] | number: '1.0-0' }}°</span>
+      <span>Мин.: {{ dailyWeater.daily.temperature_2m_min[0] | number: '1.0-0' }}°</span>
     </div>
-    <div class="flex gap-4 w-full items-center justify-around text-lg sm:text-xl md:text-2xl">
-      <span>Восход: {{ getSunriseTime() }}</span>
-      <span>Восход: {{ getSunsetTime() }}</span>
+    <div class="flex gap-4 w-full items-center justify-around text-lg sm:text-lg md:text-xl">
+      <div class="flex items-center gap-2">
+        <span>Восход: {{ getSunriseTime() }}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span>Закат: {{ getSunsetTime() }}</span>
+      </div>
     </div>
-
   </div>
-
-
   <!-- Нижний блок -->
   <div class="details relative z-10 mt-3 grid grid-cols-2 gap-2 text-left text-sm sm:text-base md:text-lg pb-6 px-4 sm:px-8">
     <span>Ветер:</span>
@@ -66,7 +67,7 @@
     </span>
     <span>Давление:</span><span class="text-right font-medium">{{ weather.main.pressure }} гПа</span>
     <span>Влажность:</span><span class="text-right font-medium">{{ weather.main.humidity }}%</span>
-   
+
   </div>
 </div>
 

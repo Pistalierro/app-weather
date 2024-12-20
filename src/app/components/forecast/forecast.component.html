@@ -1,13 +1,24 @@
-<div *ngIf="forecast() && !loading() && !error()" class="forecast-container grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto mt-8">
-  <div *ngFor="let day of forecast()" class="forecast-card bg-white p-4 rounded shadow-md text-center">
-    <h3 class="text-lg font-bold text-blue-700">{{ day.dt_txt | date: 'EEEE' }}</h3>
-    <p class="text-sm text-gray-600">{{ day.dt_txt | date: 'd MMMM, HH:mm' }}</p>
-    <img
-      [src]="'https://openweathermap.org/img/wn/' + day.weather[0].icon + '@2x.png'"
-      alt="Weather icon"
-      class="weather-icon mx-auto my-4"
-    />
-    <p class="temperature text-2xl font-medium text-blue-500">{{ day.main.temp }}°C</p>
-    <p class="description text-gray-600 capitalize">{{ day.weather[0].description }}</p>
+<div *ngIf="forecastWeather() as forecast"
+     class="hourly-weather-container relative text-gray-200 text-shadow-lg p-6 mx-auto w-full max-w-screen-lg">
+  <h2 class="text-xl sm:text-2xl md:text-3xl text-white font-bold mb-4 text-center">Почасовой прогноз</h2>
+
+  <!-- Контейнер с горизонтальным скроллом -->
+  <div class="hourly-weather-scroll flex overflow-x-auto  p-4 bg-opacity-20 bg-white rounded-lg">
+    <!-- Элементы почасового прогноза -->
+    <div *ngFor="let hour of forecast.list | slice: 0:24"
+         class="hourly-weather-item flex-shrink-0 bg-black bg-opacity-50  p-6 w-32 text-center flex flex-col items-center">
+      <p class="text-base sm:text-lg font-medium mb-2">
+        {{ hour.dt_txt | date: 'HH:mm' }}
+      </p>
+      <img [src]="'https://openweathermap.org/img/wn/' + hour.weather[0].icon + '@2x.png'"
+           alt="{{ hour.weather[0].description }}"
+           class="w-16 h-16 mb-3">
+      <p class="text-xl sm:text-2xl font-semibold mb-2">
+        {{ hour.main.temp | number: '1.0-0' }}°
+      </p>
+      <p class="text-sm sm:text-base capitalize text-center leading-tight">
+        {{ hour.weather[0].description }}
+      </p>
+    </div>
   </div>
 </div>
