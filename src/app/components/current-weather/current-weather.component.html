@@ -1,5 +1,5 @@
 <div *ngIf="currentWeather() as weather; else loadingOrError"
-     class="weather-container relative text-white text-shadow-lg overflow-hidden text-center min-vh-screen p-6 max-w-full mx-auto flex flex-col justify-between">
+     class="weather-container relative text-white text-shadow-lg overflow-hidden text-center min-vh-screen px-2 sm:px6 py-4 sm:py-6 max-w-full mx-auto flex flex-col justify-between">
 
   <video [src]="getWeatherVideo(weather.weather[0])" autoplay class="absolute inset-0 w-full h-full object-cover -z-10" loop muted
          playsinline preload="auto" type="video/mp4">Ваш браузер не поддерживает видео.
@@ -32,7 +32,7 @@
 
 
   <!-- Центральный блок -->
-  <div class="relative mt-5 z-10 flex-grow flex flex-col items-center justify-start text-center px-4 sm:px-8">
+  <div class="relative z-10 flex-grow flex flex-col items-center justify-start text-center">
     <h1 class="city text-3xl sm:text-4xl md:text-5xl font-bold">
       {{ weather.name }}
       <img *ngIf="weather.sys.country"
@@ -57,12 +57,9 @@
         <span>Закат: {{ getSunsetTime() }}</span>
       </div>
     </div>
-    <div class="mt-4  max-w-full overflow-x-auto mx-auto">
-      <app-forecast [resetScroll]="shouldResetScroll"></app-forecast>
-    </div>
   </div>
   <!-- Нижний блок -->
-  <div class="details relative z-10 mt-3 grid grid-cols-2 gap-2 text-left text-sm sm:text-base md:text-lg pb-6 px-4 sm:px-8">
+  <div class="details relative z-10 mt-3 grid grid-cols-2 gap-2 text-left text-sm sm:text-base md:text-lg pb-6 px-2 sm:px-6">
     <span>Ветер:</span>
     <span class="text-right font-medium">
       {{ weather.wind.speed | number: '1.0-0' }} м/с
@@ -70,6 +67,9 @@
     </span>
     <span>Давление:</span><span class="text-right font-medium">{{ weather.main.pressure }} гПа</span>
     <span>Влажность:</span><span class="text-right font-medium">{{ weather.main.humidity }}%</span>
+  </div>
+  <div class="mt-4 px-2 sm:px-6 max-w-full overflow-x-auto mx-auto">
+    <app-forecast [resetScroll]="shouldResetScroll"></app-forecast>
   </div>
 </div>
 

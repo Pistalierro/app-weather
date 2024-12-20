@@ -20,8 +20,9 @@ export class ForecastComponent implements OnInit, AfterViewInit {
 
   @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
   private weatherService = inject(WeatherService);
-  error = this.weatherService.error;
+  currentWeather = this.weatherService.currentWeather;
   forecastWeather = this.weatherService.forecastWeather;
+  error = this.weatherService.error;
   private geolocationService = inject(GeolocationService);
 
   constructor() {
@@ -53,7 +54,6 @@ export class ForecastComponent implements OnInit, AfterViewInit {
     if (!forecast) return [];
 
     const now = new Date();
-
     const currentHour = now.getHours();
     const nextHour = currentHour % 3 === 0 ? currentHour : currentHour + (3 - (currentHour % 3));
 
@@ -61,8 +61,25 @@ export class ForecastComponent implements OnInit, AfterViewInit {
       const forecastDate = new Date(item.dt_txt);
       return forecastDate >= now;
     });
-
     return filteredList.slice(0, 24);
+  }
+
+  getEnhancedForecast(): any[] {
+    const currentWeather = this.currentWeather();
+    const forecast = this.getDynamicForecast();
+
+    if (!currentWeather || !forecast) return [];
+
+    // Форматируем текущую погоду в том же формате, что и прогноз
+    const currentWeatherFormatted = {
+      label: 'Сейчас', // Замена времени на "Сейчас"
+      main: currentWeather.main,
+      weather: currentWeather.weather,
+      dt_txt: '', // Для текущей погоды время не требуется
+    };
+
+    // Возвращаем текущую погоду как первый элемент списка
+    return [currentWeatherFormatted, ...forecast];
   }
 
   scrollStart(): void {
