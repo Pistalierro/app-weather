@@ -2,15 +2,13 @@ import {ChangeDetectionStrategy, Component, effect, inject, OnInit} from '@angul
 import {WeatherService} from '../../services/weather.service';
 import {FormsModule} from '@angular/forms';
 import {animate, style, transition, trigger} from '@angular/animations';
-import {DecimalPipe, NgIf} from '@angular/common';
+import {DecimalPipe, NgClass, NgIf} from '@angular/common';
 import {GeolocationService} from '../../services/geolocation.service';
-import {getWeatherVideoById} from '../../utils/getWeatherVideo';
-import {ForecastComponent} from '../forecast/forecast.component';
 
 @Component({
   selector: 'app-current-weather',
   standalone: true,
-  imports: [FormsModule, NgIf, DecimalPipe, ForecastComponent],
+  imports: [FormsModule, NgIf, DecimalPipe, NgClass],
   templateUrl: './current-weather.component.html',
   styleUrl: './current-weather.component.scss',
   animations: [
@@ -27,12 +25,10 @@ import {ForecastComponent} from '../forecast/forecast.component';
 export class CurrentWeatherComponent implements OnInit {
   city!: string;
   shouldResetScroll: boolean = false;
-  private weatherService = inject(WeatherService);
-  loading = this.weatherService.loading;
-  currentWeather = this.weatherService.currentWeather;
-  error = this.weatherService.error;
-  dailyWeather = this.weatherService.dailyWeather;
   private geolocationService = inject(GeolocationService);
+  private weatherService = inject(WeatherService);
+  currentWeather = this.weatherService.currentWeather;
+  dailyWeather = this.weatherService.dailyWeather;
 
   constructor() {
     effect(() => {
@@ -63,12 +59,6 @@ export class CurrentWeatherComponent implements OnInit {
     }
   }
 
-  getWeatherVideo(weather: any): string {
-    if (!weather || !weather.id) return '/video/default.mp4';
-
-    return getWeatherVideoById(weather.id);
-  }
-
   getSunriseTime(): string | null {
     const weather = this.currentWeather();
     if (weather && weather.sys && weather.sys.sunrise) {
@@ -96,5 +86,4 @@ export class CurrentWeatherComponent implements OnInit {
     const index = Math.round(degrees / 45) % 8;
     return directions[index];
   }
-
 }

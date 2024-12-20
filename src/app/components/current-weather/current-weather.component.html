@@ -1,5 +1,5 @@
-<div *ngIf="currentWeather() as weather; else loadingOrError"
-     class="weather-container relative text-white text-shadow-lg overflow-hidden text-center min-h-full  sm:px6 py-4 sm:py-6 max-w-full mx-auto flex flex-col justify-between">
+<div *ngIf="currentWeather() as weather"
+     class="weather-container relative text-white text-shadow-lg overflow-hidden text-center min-h-full sm:px6 py-4 sm:py-6 max-w-full mx-auto flex flex-col justify-between">
 
   <div class="flex w-full justify-center mb-8">
     <!-- Контейнер с overflow-hidden -->
@@ -26,52 +26,54 @@
     </div>
   </div>
 
+  <!-- Основной контейнер на гридах -->
+  <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 items-center">
 
-  <!-- Центральный блок -->
-  <div class="relative z-10 flex-grow flex flex-col items-center justify-start text-center">
-    <h1 class="city text-3xl sm:text-4xl md:text-5xl font-bold">
-      {{ weather.name }}
-      <img *ngIf="weather.sys.country"
-           [src]="'https://flagcdn.com/64x48/' + weather.sys.country.toLowerCase() + '.png'"
-           alt="{{ weather.sys.country }}"
-           class="inline w-6 h-4 ml-2 lg:w-12 lg:h-8 lg:ml-4">
-    </h1>
-    <div class="mb-5 grid grid-cols-1 gap-8 text-xl sm:text-2xl md:text-3xl">
-      <p class="text-5xl sm:text-6xl md:text-7xl font-semibold">{{ weather.main.temp | number: '1.0-0' }}°</p>
-      <p class="first-letter:capitalize">{{ weather.weather[0].description }}</p>
-      <p>По ощущениям как {{ weather.main.feels_like | number: '1.0-0' }}°</p>
-    </div>
-    <div *ngIf="dailyWeather() as dailyWeater" class="flex items-center justify-around w-full text-lg sm:text-xl md:text-2xl gap-4 mb-5">
-      <span>Макс.: {{ dailyWeater.daily.temperature_2m_max[0] | number: '1.0-0' }}°</span>
-      <span>Мин.: {{ dailyWeater.daily.temperature_2m_min[0] | number: '1.0-0' }}°</span>
-    </div>
-    <div class="flex gap-4 w-full items-center justify-around text-lg sm:text-lg md:text-xl">
-      <div class="flex items-center gap-2">
-        <span>Восход: {{ getSunriseTime() }}</span>
+    <!-- Центральный блок -->
+    <div class="order-1 sm:order-2 col-start-1 col-span-2 sm:col-span-1 flex flex-col items-center text-center">
+      <h1 class="city text-2xl sm:text-3xl md:text-5xl font-bold">
+        {{ weather.name }}
+        <img *ngIf="weather.sys.country"
+             [src]="'https://flagcdn.com/64x48/' + weather.sys.country.toLowerCase() + '.png'"
+             alt="{{ weather.sys.country }}"
+             class="inline w-6 h-4 ml-2 lg:w-12 lg:h-8 lg:ml-4">
+      </h1>
+      <div class="mb-5 text-xl sm:text-xl md:text-2xl lg:text-3xl">
+        <p class="text-5xl sm:text-6xl md:text-7xl font-semibold">{{ weather.main.temp | number: '1.0-0' }}°</p>
+        <p class="first-letter:capitalize">{{ weather.weather[0].description }}</p>
+        <p>По ощущениям как {{ weather.main.feels_like | number: '1.0-0' }}°</p>
       </div>
-      <div class="flex items-center gap-2">
-        <span>Закат: {{ getSunsetTime() }}</span>
+    </div>
+
+    <!-- Левый блок -->
+    <div class="order-1 flex flex-col gap-2 text-sm sm:text-xl md:text-2xl text-left lg:text-center">
+      <div>
+        <span class="font-medium">Макс.: {{ weather.main.temp_max | number: '1.0-0' }}°,</span>
+        <span class="font-medium">мин.: {{ weather.main.temp_min | number: '1.0-0' }}°</span>
+      </div>
+      <div>
+        <span class="font-medium">Восход: {{ getSunriseTime() }}</span>
+      </div>
+      <div>
+        <span class="font-medium">Закат: {{ getSunsetTime() }}</span>
+      </div>
+    </div>
+
+    <!-- Правый блок -->
+    <div class="order-3 text-sm sm:text-xl md:text-2xl text-right lg:text-center flex flex-col gap-2">
+      <div>
+        <span class="font-medium">Ветер:</span>
+        <span class="font-medium">
+          {{ weather.wind.speed | number: '1.0-0' }} м/с
+          <p>{{ getWindDirection(weather.wind.deg) }}</p>
+        </span>
+      </div>
+      <div>
+        <span class="font-medium">Давление: {{ weather.main.pressure }} гПа</span>
+      </div>
+      <div>
+        <span class="font-medium">Влажность: {{ weather.main.humidity }}%</span>
       </div>
     </div>
   </div>
-  <!-- Нижний блок -->
-  <div class="details relative z-10 mt-3 grid grid-cols-2 gap-2 text-left text-sm sm:text-base md:text-lg pb-6">
-    <span>Ветер:</span>
-    <span class="text-right font-medium">
-      {{ weather.wind.speed | number: '1.0-0' }} м/с
-      <span *ngIf="weather.wind.deg">, {{ getWindDirection(weather.wind.deg) }}</span>
-    </span>
-    <span>Давление:</span><span class="text-right font-medium">{{ weather.main.pressure }} гПа</span>
-    <span>Влажность:</span><span class="text-right font-medium">{{ weather.main.humidity }}%</span>
-  </div>
-
 </div>
-
-<ng-template #loadingOrError>
-  <div *ngIf="loading()" class="loading text-gray-500 text-center">
-    Загрузка данных...
-  </div>
-  <div *ngIf="!loading() && error()" class="error text-red-500 text-center">
-    {{ error() }}
-  </div>
-</ng-template>
