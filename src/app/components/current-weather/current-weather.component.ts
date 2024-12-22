@@ -41,6 +41,7 @@ export class CurrentWeatherComponent implements OnInit {
           this.previousCoords.lon !== coords.lon
         ) {
           this.previousCoords = {lat: coords.lat, lon: coords.lon}; // Сохраняем координаты
+          console.log('Effect в current-weather: Отправляем запросы');
           this.weatherService.fetchCurrentWeatherByCoords(coords.lat, coords.lon);
           this.weatherService.fetchDailyWeather(coords.lat, coords.lon);
         }

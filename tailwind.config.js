@@ -14,6 +14,9 @@ module.exports = {
       1px -1px 0 rgba(0, 0, 0, 0.4),
       -1px -1px 0 rgba(0, 0, 0, 0.4),
       3px 3px 6px rgba(0, 0, 0, 0.9)` // Черный контур и мягкая тень
+      },
+      fontFamily: {
+        exo: ['"Exo 2"', 'sans-serif']
       }
     }
   },

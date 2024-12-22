@@ -37,12 +37,12 @@ export class ForecastComponent implements OnInit {
             this.previousCoords.lon !== coords.lon
           ) {
             this.previousCoords = {lat: coords.lat, lon: coords.lon}; // Сохраняем координаты
+            console.log('Effect в forecast: Отправляем запросы');
             this.weatherService.fetchForecastWeatherByCoords(coords.lat, coords.lon);
             this.weatherService.fetchDailyWeather(coords.lat, coords.lon);
           }
         }
 
-        // Обрабатываем сигнал сброса скролла
         if (this.scrollService.resetSignal()) {
           this.resetScroll();
         }

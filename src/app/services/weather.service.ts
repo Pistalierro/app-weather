@@ -28,7 +28,7 @@ export class WeatherService {
 
     this.http.get<CurrentResponseInterface>(url).subscribe({
       next: (res: CurrentResponseInterface) => {
-        // console.log('fetchCurrentWeatherByCoords returned: ', res);
+        console.log('fetchCurrentWeatherByCoords returned: ', res);
         this.currentWeather.set(res);
         this.loading.set(false);
       },
@@ -46,7 +46,7 @@ export class WeatherService {
 
     this.http.get<CurrentResponseInterface>(url).subscribe({
       next: (res: CurrentResponseInterface) => {
-        // console.log('fetchCurrentWeatherByCity returned: ', res);
+        console.log('fetchCurrentWeatherByCity returned: ', res);
         this.currentWeather.set(res);
         this.loading.set(false);
         const {lat, lon} = res.coord;
@@ -85,7 +85,7 @@ export class WeatherService {
 
     this.http.get<ForecastResponseInterface>(url).subscribe({
       next: (res: ForecastResponseInterface) => {
-        // console.log('fetchForecastWeatherByCity returned: ', res);
+        console.log('fetchForecastWeatherByCity returned: ', res);
         this.forecastWeather.set(res);
         this.loading.set(false);
       },
@@ -101,6 +101,7 @@ export class WeatherService {
 
     this.http.get<DailyResponseInterface>(url).subscribe({
       next: (res) => {
+        console.log('fetchDailyWeather returned: ', res);
         this.dailyWeather.set(res);
       },
       error: (err) => this.error.set('Ошибка получения прогноза погоды'),
