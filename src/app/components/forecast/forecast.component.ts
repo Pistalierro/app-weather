@@ -22,16 +22,27 @@ export class ForecastComponent implements OnInit {
   currentWeather = this.weatherService.currentWeather;
   forecastWeather = this.weatherService.forecastWeather;
   error = this.weatherService.error;
+  private previousCoords: { lat: number | null; lon: number | null } | null = null;
   private geolocationService = inject(GeolocationService);
   private scrollService = inject(ScrollService);
 
   constructor() {
     effect(() => {
         const coords = this.geolocationService.coordinates();
-        if (coords.lat && coords.lon) {
-          this.weatherService.fetchForecastWeatherByCoords(coords.lat, coords.lon);
-          this.weatherService.fetchDailyWeather(coords.lat, coords.lon);
+        if (coords.lat !== null && coords.lon !== null) {
+          // Проверяем, изменились ли координаты
+          if (
+            !this.previousCoords ||
+            this.previousCoords.lat !== coords.lat ||
+            this.previousCoords.lon !== coords.lon
+          ) {
+            this.previousCoords = {lat: coords.lat, lon: coords.lon}; // Сохраняем координаты
+            this.weatherService.fetchForecastWeatherByCoords(coords.lat, coords.lon);
+            this.weatherService.fetchDailyWeather(coords.lat, coords.lon);
+          }
         }
+
+        // Обрабатываем сигнал сброса скролла
         if (this.scrollService.resetSignal()) {
           this.resetScroll();
         }
@@ -78,4 +89,32 @@ export class ForecastComponent implements OnInit {
 
     return [currentWeatherFormatted, ...forecast];
   }
+
+  getDailyForecast(): any[] {
+    const dailyWeather = this.weatherService.dailyWeather();
+    const forecastWeather = this.weatherService.forecastWeather();
+
+    if (!dailyWeather || !dailyWeather.daily || !forecastWeather || !forecastWeather.list) return [];
+
+    // Сопоставляем даты и данные о погоде
+    return dailyWeather.daily.time.map((time: string, index: number) => {
+      // Ищем ближайшее совпадение по времени
+      const matchingForecast = forecastWeather.list.find((forecast) => {
+        const forecastDate = new Date(forecast.dt_txt).toDateString();
+        const dailyDate = new Date(time).toDateString();
+        return forecastDate === dailyDate;
+      });
+
+      return {
+        date: new Date(time),
+        tempMin: dailyWeather.daily.temperature_2m_min[index],
+        tempMax: dailyWeather.daily.temperature_2m_max[index],
+        label: index === 0 ? 'Сегодня' : new Date(time).toLocaleDateString('ru-RU', {weekday: 'long'}),
+        icon: matchingForecast?.weather[0]?.icon || '01d', // Иконка из прогноза
+        description: matchingForecast?.weather[0]?.description || 'Нет данных', // Описание из прогноза
+      };
+    });
+  }
+
+
 }

@@ -67,7 +67,7 @@ export class WeatherService {
 
     this.http.get<ForecastResponseInterface>(url).subscribe({
       next: (res: ForecastResponseInterface) => {
-        // console.log('fetchForecastWeatherByCoords returned: ', res);
+        console.log('fetchForecastWeatherByCoords returned: ', res);
         this.forecastWeather.set(res);
         this.loading.set(false);
       },

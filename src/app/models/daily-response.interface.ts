@@ -10,6 +10,10 @@ export interface DailyResponseInterface {
     time: string[]; // Даты прогнозов в формате YYYY-MM-DD
     temperature_2m_min: number[]; // Минимальная температура за день
     temperature_2m_max: number[]; // Максимальная температура за день
+    weather: { // Добавляем погоду (опционально, если данные могут отсутствовать)
+      icon: string; // Код иконки (например, '01d')
+      description: string; // Описание погоды (например, 'ясно')
+    }[];
   };
   daily_units: {
     time: string; // Единица измерения времени, например "iso8601"

@@ -28,22 +28,38 @@ export class CurrentWeatherComponent implements OnInit {
   private geolocationService = inject(GeolocationService);
   private weatherService = inject(WeatherService);
   currentWeather = this.weatherService.currentWeather;
+  private previousCoords: { lat: number; lon: number } | null = null;
   private scrollService = inject(ScrollService);
 
   constructor() {
     effect(() => {
-        const coords = this.geolocationService.coordinates();
-        if (coords.lat && coords.lon) {
+      const coords = this.geolocationService.coordinates();
+      if (coords.lat !== null && coords.lon !== null) {
+        if (
+          !this.previousCoords ||
+          this.previousCoords.lat !== coords.lat ||
+          this.previousCoords.lon !== coords.lon
+        ) {
+          this.previousCoords = {lat: coords.lat, lon: coords.lon}; // Сохраняем координаты
           this.weatherService.fetchCurrentWeatherByCoords(coords.lat, coords.lon);
           this.weatherService.fetchDailyWeather(coords.lat, coords.lon);
         }
-      },
-      {allowSignalWrites: true}
-    );
+      }
+    }, {allowSignalWrites: true});
   }
 
   ngOnInit() {
     this.geolocationService.getCurrentLocation();
+  }
+
+  getCurrentLocation() {
+    this.geolocationService.getCurrentLocation();
+
+    const coords = this.geolocationService.coordinates();
+    if (coords.lat && coords.lon) {
+      this.weatherService.fetchCurrentWeatherByCoords(coords.lat, coords.lon);
+      this.weatherService.fetchDailyWeather(coords.lat, coords.lon);
+    }
   }
 
   fetchWeatherAndForecastByCity(): void {
