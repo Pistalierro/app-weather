@@ -2,22 +2,14 @@
      class="weather-container relative text-white text-shadow-lg overflow-hidden text-center min-h-full sm:px6 py-4 sm:py-6 max-w-full mx-auto flex flex-col justify-between">
 
   <div class="flex w-full justify-center mb-8">
-    <!-- Контейнер с overflow-hidden -->
     <div class="relative w-full sm:w-64 md:w-80 lg:w-96 overflow-hidden rounded">
-      <!-- Инпут -->
       <input
-        (keydown.enter)="fetchWeatherAndForecastByCity()"
-        [(ngModel)]="city"
+        (keydown.enter)="fetchWeatherAndForecastByCity()" [(ngModel)]="city"
         class="border bg-transparent text-white placeholder-white placeholder:text-center px-4 py-2 pr-16 rounded w-full"
-        placeholder="Введите название города"
-        type="text"
-      />
-      <!-- Кнопка -->
+        placeholder="Введите название города" type="text"/>
       <button
-        (click)="fetchWeatherAndForecastByCity()"
-        aria-label="Поиск"
-        class="absolute focus:border-white top-0 right-0 h-full w-12 bg-white bg-opacity-20 text-white border-l border-white hover:bg-white hover:bg-opacity-60 transition"
-      >
+        (click)="fetchWeatherAndForecastByCity()" aria-label="Поиск"
+        class="absolute focus:border-white top-0 right-0 h-full w-12 bg-white bg-opacity-20 text-white border-l border-white hover:bg-white hover:bg-opacity-60 transition">
         <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
              xmlns="http://www.w3.org/2000/svg">
           <path d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 100-15 7.5 7.5 0 000 15z" stroke-linecap="round" stroke-linejoin="round"/>
@@ -26,10 +18,8 @@
     </div>
   </div>
 
-  <!-- Основной контейнер на гридах -->
   <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 items-center">
 
-    <!-- Центральный блок -->
     <div class="order-1 sm:order-2 col-start-1 col-span-2 sm:col-span-1 flex flex-col items-center text-center">
       <h1 class="city text-2xl sm:text-3xl md:text-5xl font-bold">
         {{ weather.name }}
@@ -45,7 +35,6 @@
       </div>
     </div>
 
-    <!-- Левый блок -->
     <div class="order-1 flex flex-col gap-2 text-sm sm:text-xl md:text-2xl text-left lg:text-center">
       <div>
         <span class="font-medium">Макс.: {{ weather.main.temp_max | number: '1.0-0' }}°,</span>
@@ -59,7 +48,6 @@
       </div>
     </div>
 
-    <!-- Правый блок -->
     <div class="order-3 text-sm sm:text-xl md:text-2xl text-right lg:text-center flex flex-col gap-2">
       <div>
         <span class="font-medium">Ветер:</span>

@@ -2,13 +2,14 @@ import {ChangeDetectionStrategy, Component, effect, inject, OnInit} from '@angul
 import {WeatherService} from '../../services/weather.service';
 import {FormsModule} from '@angular/forms';
 import {animate, style, transition, trigger} from '@angular/animations';
-import {DecimalPipe, NgClass, NgIf} from '@angular/common';
+import {DecimalPipe, NgIf} from '@angular/common';
 import {GeolocationService} from '../../services/geolocation.service';
+import {ScrollService} from '../../services/scroll.service';
 
 @Component({
   selector: 'app-current-weather',
   standalone: true,
-  imports: [FormsModule, NgIf, DecimalPipe, NgClass],
+  imports: [FormsModule, NgIf, DecimalPipe],
   templateUrl: './current-weather.component.html',
   styleUrl: './current-weather.component.scss',
   animations: [
@@ -24,11 +25,10 @@ import {GeolocationService} from '../../services/geolocation.service';
 
 export class CurrentWeatherComponent implements OnInit {
   city!: string;
-  shouldResetScroll: boolean = false;
   private geolocationService = inject(GeolocationService);
   private weatherService = inject(WeatherService);
   currentWeather = this.weatherService.currentWeather;
-  dailyWeather = this.weatherService.dailyWeather;
+  private scrollService = inject(ScrollService);
 
   constructor() {
     effect(() => {
@@ -50,12 +50,8 @@ export class CurrentWeatherComponent implements OnInit {
     if (this.city.length > 0) {
       this.weatherService.fetchCurrentWeatherByCity(this.city.trim());
       this.weatherService.fetchForecastWeatherByCity(this.city.trim());
+      this.scrollService.triggerScrollReset();
       this.city = '';
-
-      this.shouldResetScroll = true;
-      setTimeout(() => {
-        this.shouldResetScroll = false;
-      }, 100);
     }
   }
 

@@ -1,7 +1,8 @@
-import {AfterViewInit, Component, effect, ElementRef, inject, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, effect, inject, OnInit} from '@angular/core';
 import {WeatherService} from '../../services/weather.service';
 import {GeolocationService} from '../../services/geolocation.service';
 import {CommonModule, DatePipe, DecimalPipe, NgForOf, NgIf} from '@angular/common';
+import {ScrollService} from '../../services/scroll.service';
 
 @Component({
   selector: 'app-forecast',
@@ -16,14 +17,13 @@ import {CommonModule, DatePipe, DecimalPipe, NgForOf, NgIf} from '@angular/commo
   templateUrl: './forecast.component.html',
   styleUrl: './forecast.component.scss'
 })
-export class ForecastComponent implements OnInit, AfterViewInit {
-
-  @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
+export class ForecastComponent implements OnInit {
   private weatherService = inject(WeatherService);
   currentWeather = this.weatherService.currentWeather;
   forecastWeather = this.weatherService.forecastWeather;
   error = this.weatherService.error;
   private geolocationService = inject(GeolocationService);
+  private scrollService = inject(ScrollService);
 
   constructor() {
     effect(() => {
@@ -32,21 +32,23 @@ export class ForecastComponent implements OnInit, AfterViewInit {
           this.weatherService.fetchForecastWeatherByCoords(coords.lat, coords.lon);
           this.weatherService.fetchDailyWeather(coords.lat, coords.lon);
         }
+        if (this.scrollService.resetSignal()) {
+          this.resetScroll();
+        }
       },
       {allowSignalWrites: true}
     );
-  }
-
-  @Input() set resetScroll(value: boolean) {
-    if (value) this.scrollStart();
   }
 
   ngOnInit(): void {
     this.geolocationService.getCurrentLocation();
   }
 
-  ngAfterViewInit(): void {
-    this.scrollStart();
+  resetScroll(): void {
+    const scrollContainer = document.querySelector('.hourly-weather-scroll') as HTMLElement;
+    if (scrollContainer) {
+      scrollContainer.scrollTo({left: 0, behavior: 'smooth'});
+    }
   }
 
   getDynamicForecast(): any[] {
@@ -54,9 +56,6 @@ export class ForecastComponent implements OnInit, AfterViewInit {
     if (!forecast) return [];
 
     const now = new Date();
-    const currentHour = now.getHours();
-    const nextHour = currentHour % 3 === 0 ? currentHour : currentHour + (3 - (currentHour % 3));
-
     const filteredList = forecast.list.filter((item: any) => {
       const forecastDate = new Date(item.dt_txt);
       return forecastDate >= now;
@@ -70,23 +69,13 @@ export class ForecastComponent implements OnInit, AfterViewInit {
 
     if (!currentWeather || !forecast) return [];
 
-    // Форматируем текущую погоду в том же формате, что и прогноз
     const currentWeatherFormatted = {
-      label: 'Сейчас', // Замена времени на "Сейчас"
+      label: 'Сейчас',
       main: currentWeather.main,
       weather: currentWeather.weather,
-      dt_txt: '', // Для текущей погоды время не требуется
+      dt_txt: '',
     };
 
-    // Возвращаем текущую погоду как первый элемент списка
     return [currentWeatherFormatted, ...forecast];
   }
-
-  scrollStart(): void {
-    if (this.scrollContainer) this.scrollContainer.nativeElement.scrollTo({
-      left: 0,
-      behavior: 'smooth',
-    });
-  }
-
 }
